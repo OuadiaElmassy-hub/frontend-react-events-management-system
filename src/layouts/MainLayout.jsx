@@ -1,0 +1,18 @@
+// src/layouts/MainLayout.jsx
+import { Outlet } from 'react-router-dom'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
+import ChatBot from '../components/ChatBot'
+
+export default function MainLayout() {
+  return (
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      <Navbar />
+      <main className="flex-1">
+        <Outlet />  {/* ← la page s'affiche ici */}
+      </main>
+      <ChatBot />
+      <Footer />
+    </div>
+  )
+}
