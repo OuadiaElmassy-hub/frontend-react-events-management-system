@@ -19,7 +19,7 @@ const apiFetch = async (path, options = {}) => {
   if (res.status === 401) {
     localStorage.removeItem("token");
     console.error("401 sur:", path); // ← temporaire pour debug
-    //window.location.href = "/auth";
+    window.location.href = "/auth";
     throw new Error("Non autorisé");
   }
 

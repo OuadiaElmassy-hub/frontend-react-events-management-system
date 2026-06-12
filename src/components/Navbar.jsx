@@ -80,6 +80,14 @@ export default function Navbar() {
     navigate('/')
   }
 
+  // Ajouter cette fonction AVANT le return du composant
+  const getPrimaryRole = (user) => {
+    const roles = user.roles ?? (user.role ? [user.role] : [])
+    if (roles.includes('ADMIN'))        return 'ADMIN'
+    if (roles.includes('ORGANISATEUR')) return 'ORGANISATEUR'
+    return 'CLIENT'
+  }
+
   return (
     <>
       <nav
@@ -146,7 +154,7 @@ export default function Navbar() {
                   </svg>
                 </button>
 
-                {/* Dropdown Menu */}
+                {/* Dropdown Menu
                 {dropdownOpen && (
                   <div className="absolute right-0 top-[calc(100%+6px)] w-52 bg-white border border-gray-100 rounded-xl shadow-lg py-1.5 z-50">
                     <div className="px-4 py-2.5 border-b border-gray-50">
@@ -190,7 +198,78 @@ export default function Navbar() {
                       </button>
                     </div>
                   </div>
-                )}
+                )} */}
+                {dropdownOpen && (
+                <div className="absolute right-0 top-[calc(100%+6px)] w-52 bg-white border border-gray-100 rounded-xl shadow-lg py-1.5 z-50">
+                  
+                  {/* Header commun */}
+                  <div className="px-4 py-2.5 border-b border-gray-50">
+                    <p className="text-sm font-semibold text-gray-900 truncate">{user.nom}</p>
+                    <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                  </div>
+
+                  {/* Items selon rôle principal */}
+                  {(() => {
+                    const role = getPrimaryRole(user)
+
+                    if (role === 'ADMIN') return (
+                      <>
+                        <Link to="/admin/dashboard" onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                            <path d="M12 2l3 7h7l-6 4 2 7-6-4-6 4 2-7-6-4h7z"/>
+                          </svg>
+                          Dashboard admin
+                        </Link>
+                      </>
+                    )
+
+                    if (role === 'ORGANISATEUR') return (
+                      <>
+                        <Link to="/organisateur/dashboard" onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                            <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                          </svg>
+                          Dashboard organisateur
+                        </Link>
+                      </>
+                    )
+
+                    // CLIENT (défaut)
+                    return (
+                      <>
+                        <Link to="/client/dashboard" onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                          </svg>
+                          Mon profil
+                        </Link>
+                        <Link to="/mes-reservations" onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
+                          </svg>
+                          Mes réservations
+                        </Link>
+                      </>
+                    )
+                  })()}
+
+                  {/* Déconnexion — toujours visible */}
+                  <div className="border-t border-gray-50 mt-1 pt-1">
+                    <button onClick={handleLogout}
+                      className="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
+                      </svg>
+                      Déconnexion
+                    </button>
+                  </div>
+                </div>
+              )}
               </div>
             ) : (
               // ── Desktop Non connecté ──

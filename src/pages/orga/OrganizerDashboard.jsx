@@ -163,7 +163,7 @@ const StatusBadge = ({ status }) => {
 const OrgDashboard = () => {
   const { user, logout } = useAuth(); 
   const { data: stats,   loading: lS, error: eS, refetch: rS } = useApi(
-    () => apiFetch("/organisateur/dashboard/stats")
+    () => apiFetch("/organisateur/statistiques")
   );
   const { data: recent,  loading: lR, error: eR, refetch: rR } = useApi(
     () => apiFetch("/organisateur/events?sort=createdAt,desc&size=5")
