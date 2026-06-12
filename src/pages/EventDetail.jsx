@@ -999,14 +999,16 @@ const EventDetail = () => {
                 <>
                   <div className="space-y-4">
                     {avis.map((a) => {
-                      const client = clientsMap[a.clientId]
-                      const nom = client?.nom ?? client?.prenom ?? `Client #${a.clientId}`
+                      const nom = a?.nom && a?.prenom
+                        ? `${a.nom} ${a.prenom}`
+                        : a?.nom ?? a?.prenom ?? `Client #${a.id}`
                       const initiale = nom.charAt(0).toUpperCase()
+
                       return (
                         <div key={a.id} className="flex gap-3">
-                          <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center shrink-0 text-blue-700 text-sm font-bold">
-                            {client?.avatarUrl ? (
-                              <img src={`${API_BASE_URL}${client.avatarUrl}`} alt={nom} className="w-full h-full rounded-full object-cover" />
+                          <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center shrink-0 text-blue-700 text-sm font-bold overflow-hidden">
+                            {a?.avatarUrl ? (
+                              <img src={`${API_BASE_URL}${a.avatarUrl}`} alt={nom} className="w-full h-full rounded-full object-cover" />
                             ) : initiale}
                           </div>
                           <div className="flex-1">
