@@ -193,7 +193,7 @@ const OrgDashboard = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 mb-1">
-            Bonjour{stats?.prenom ? `, ${stats.prenom}` : ""} 👋
+            Bonjour{user?.prenom ? `, ${user.prenom}` : user?.nom ? `, ${user.nom}` : ""} 👋
           </h2>
           <p className="text-gray-500 text-sm">Vue d'ensemble de votre activité</p>
         </div>
@@ -878,6 +878,7 @@ const OrgProfilePage = () => {
     if (profile) {
       setForm({
         nom:             profile.nom || "",
+        prenom:             profile.prnom || "",
         email:           profile.email || "",
         telephone:       profile.telephone || "",
         ville:           profile.ville || "",
@@ -972,6 +973,7 @@ const OrgProfilePage = () => {
           {[
             ["organisationNom", "Nom de l'organisation", "text"],
             ["nom",             "Nom du responsable",    "text"],
+            ["prenom",             "Prénom du responsable",    "text"],
             ["email",           "Email",                 "email"],
             ["telephone",       "Téléphone",             "tel"],
             ["ville",           "Ville",                 "text"],

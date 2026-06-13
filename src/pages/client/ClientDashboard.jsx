@@ -155,8 +155,7 @@ const DashboardHome = ({ onNavigate }) => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 mb-1">
-            {/* Bonjour{stats?.prenom ? `, ${stats.prenom}` : ""} */}
-            Bonjour{user?.nom ? `, ${user.prenom}` : ""} 👋
+            Bonjour{user?.prenom ? `, ${user.prenom}` : user?.nom ? `, ${user.nom}` : ""} 👋
           </h2>
           <p className="text-gray-500 text-sm">Voici un aperçu de votre activité</p>
         </div>
