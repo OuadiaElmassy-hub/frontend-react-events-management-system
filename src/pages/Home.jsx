@@ -25,7 +25,7 @@ const Home = () => {
         const cats = await getCategories()
 
         setCategories([
-          { id: 0, nom: 'All', imgUrl: '/uploads/categories-images/all.svg' },
+          { id: 0, nom: 'All', iconUrl: '/uploads/categories/all.svg' },
           ...cats
         ])
       } catch (err) {

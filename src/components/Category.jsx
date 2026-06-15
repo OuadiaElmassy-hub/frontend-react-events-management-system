@@ -24,7 +24,7 @@ const Category = ({ categories, selectedCategorie, onCategorieChange }) => {
                 {/* Image */}
                 <div className={`w-12 h-12 rounded-xl overflow-hidden shrink-0 transition-transform duration-150 ${isSelected ? 'scale-110' : ''}`}>
                   <img
-                    src={`${API_BASE_URL}${cat.imgUrl}`}
+                    src={`${API_BASE_URL}${cat.iconUrl}`}
                     alt={cat.nom}
                     className="w-full h-full object-cover"
                     loading="lazy"

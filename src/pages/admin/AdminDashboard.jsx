@@ -46,11 +46,14 @@ import {
   FaEye, FaBell, FaSync, FaDownload, FaCalendarAlt,
   FaTicketAlt, FaMoneyBillWave, FaSpinner, FaSignOutAlt
 } from "react-icons/fa";
+// import { CategoriesPage, NotificationToasts, useNotifications }
+//      from "";
 
 import { useAuth } from "../../context/AuthContext";
 import apiFetch, { BASE_URL } from "../../utils/fetchFn";
 import { HashLink as Link } from 'react-router-hash-link';
 import rovistaLogo from '../../assets/logos/rovista.svg'
+import { CategoriesPage, NotificationToasts, useNotifications } from "../CategoriesPage_NotificationsSystem";
 
 // ─────────────────────────────────────────────────────────────────
 // CONFIG API  →  adaptez BASE_URL à votre backend Spring Boot / Oracle
@@ -243,6 +246,11 @@ const DashboardHome = () => {
           </div>
         </div>
       </div>
+      <NotificationToasts
+        alerts={newAlerts}
+        onDismiss={clearAlerts}
+        onNavigate={setPage}
+      />
     </div>
   );
 };
@@ -839,14 +847,14 @@ const NotificationsPage = () => {
 
   const markRead = async (id) => {
     try {
-      await apiFetch(`/admin/notifications/${id}/read`, { method: "PATCH" });
+      await apiFetch(`/admin/notifications/${id}/lu`, { method: "PATCH" });
       refetch();
     } catch (e) {}
   };
 
   const markAllRead = async () => {
     try {
-      await apiFetch("/admin/notifications/read-all", { method: "PATCH" });
+      await apiFetch("/admin/notifications/lire-tout", { method: "PATCH" });
       refetch();
     } catch (e) {}
   };
@@ -922,11 +930,19 @@ export default function AdminDashboard() {
   const [sidebarOpen, setSidebar] = useState(false);
 
   // Badge "En attente" live
-  const { data: pending } = useApi(() => apiFetch("/admin/events/pending-count"));
-  const pendingCount = pending?.count || 0;
+  
+  // const { data: pending } = useApi(() => apiFetch("/admin/events/pending-count"));
+  // const pendingCount = pending?.count || 0;
+
+  const {
+    pendingCount,
+    unreadCount,
+    newAlerts,
+    clearAlerts,
+  } = useNotifications();
 
   const { data: unreadNotifs } = useApi(() => apiFetch("/admin/notifications/nonlu-count"));
-  const unreadCount = unreadNotifs?.count || 0;
+  //const unreadCount = unreadNotifs?.count || 0;
 
   const menu = [
     { id: "dashboard",          label: "Dashboard",             icon: <FaHome /> },
@@ -948,6 +964,7 @@ export default function AdminDashboard() {
       case "organisateurs":        return <OrganisateursPage />;
       case "statistics":        return <StatisticsPage />;
       case "notifications":     return <NotificationsPage />;
+      case "categories":        return <CategoriesPage />;
       default:                  return <PlaceholderPage title={menu.find(m => m.id === page)?.label || page} />;
     }
   };

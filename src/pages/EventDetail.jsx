@@ -762,7 +762,7 @@ const EventDetail = () => {
   useEffect(() => {
     if (!event?.images?.length) return
     intervalRef.current = setInterval(() => {
-      setGallerieIndex(i => (i + 1) % event.images.length)
+      setGallerieIndex(i => (i + 1) % event.imagesUrls.length)
     }, 4000)
     return () => clearInterval(intervalRef.current)
   }, [event])
@@ -771,7 +771,7 @@ const EventDetail = () => {
     clearInterval(intervalRef.current)
     setGallerieIndex(index)
     intervalRef.current = setInterval(() => {
-      setGallerieIndex(i => (i + 1) % event.images.length)
+      setGallerieIndex(i => (i + 1) % event.imagesUrls.length)
     }, 4000)
   }
 
@@ -810,9 +810,9 @@ const EventDetail = () => {
     <div className="min-h-screen bg-gray-50">
       {/* ── Hero image ── */}
       <div className="relative h-80 md:h-96 overflow-hidden">
-        {event.images?.length > 0 ? (
+        {event.imagesUrls?.length > 0 ? (
           <>
-            {event.images.map((url, i) => (
+            {event.imagesUrls.map((url, i) => (
               <img
                 key={i}
                 src={`${API_BASE_URL}${url}`}
@@ -823,17 +823,17 @@ const EventDetail = () => {
               />
             ))}
 
-            {event.images.length > 1 && (
+            {event.imagesUrls.length > 1 && (
               <>
                 <button
-                  onClick={() => goTo((gallerieIndex - 1 + event.images.length) % event.images.length)}
+                  onClick={() => goTo((gallerieIndex - 1 + event.imagesUrls.length) % event.imagesUrls.length)}
                   className="absolute left-4 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/40 hover:bg-black/60 text-white rounded-full flex items-center justify-center transition-all z-10"
                   aria-label="Image précédente"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M15 18l-6-6 6-6"/></svg>
                 </button>
                 <button
-                  onClick={() => goTo((gallerieIndex + 1) % event.images.length)}
+                  onClick={() => goTo((gallerieIndex + 1) % event.imagesUrls.length)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/40 hover:bg-black/60 text-white rounded-full flex items-center justify-center transition-all z-10"
                   aria-label="Image suivante"
                 >
@@ -841,7 +841,7 @@ const EventDetail = () => {
                 </button>
 
                 <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
-                  {event.images.map((_, i) => (
+                  {event.imagesUrls.map((_, i) => (
                     <button
                       key={i}
                       onClick={() => goTo(i)}
@@ -854,7 +854,7 @@ const EventDetail = () => {
                 </div>
 
                 <div className="absolute top-4 right-16 bg-black/40 text-white text-xs px-2.5 py-1 rounded-full z-10">
-                  {gallerieIndex + 1} / {event.images.length}
+                  {gallerieIndex + 1} / {event.imagesUrls.length}
                 </div>
               </>
             )}
