@@ -1136,18 +1136,18 @@ const placesRestantesPourType = ticketType === 'VIP'
     {/* VIP */}
     <button
       onClick={() => handleTypeChange('VIP')}
-      disabled={event.placesVIPRestantes === 0 || event.nbPlaceVIP === 0}
+      disabled={event.placesVIPRestantes === 0 || event.nbPlacesVIP === 0}
       className={`flex-1 py-2.5 rounded-xl border-2 text-sm font-semibold transition-all ${
         ticketType === 'VIP'
           ? 'border-yellow-500 bg-yellow-50 text-yellow-600'
-          : event.placesVIPRestantes === 0 || event.nbPlaceVIP === 0
+          : event.placesVIPRestantes === 0 || event.nbPlacesVIP === 0
           ? 'border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed'
           : 'border-gray-200 text-gray-500 hover:border-gray-300'
       }`}
     >
       <p>⭐ VIP</p>
       <p className="text-xs font-normal mt-0.5">
-        {event.nbPlaceVIP === 0
+        {event.nbPlacesVIP === 0
           ? 'Non disponible'
           : event.placesVIPRestantes === 0
           ? 'Complet'
@@ -1161,7 +1161,7 @@ const placesRestantesPourType = ticketType === 'VIP'
               <div className="bg-gray-50 rounded-xl p-4 mb-5 space-y-2">
                 <div className="flex justify-between text-sm text-gray-500">
                   <span>{prixUnitaire} DH × {qty}</span>
-                  <span>{total} DH</span>
+                  <span>{total.toFixed(2)} DH</span>
                 </div>
                 <div className="flex justify-between text-sm text-gray-500">
                   <span>Frais de service</span>
@@ -1169,7 +1169,7 @@ const placesRestantesPourType = ticketType === 'VIP'
                 </div>
                 <div className="flex justify-between text-sm font-bold text-gray-900 pt-2 border-t border-gray-200">
                   <span>Total</span>
-                  <span className="text-blue-600">{total + fraisService} DH</span>
+                  <span className="text-blue-600">{(total + fraisService).toFixed(2)} DH</span>
                 </div>
               </div>
 

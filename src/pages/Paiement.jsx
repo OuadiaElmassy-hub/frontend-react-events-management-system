@@ -64,10 +64,10 @@ const InfoItem = ({ icon, label, value }) => (
 )
 
 // ─── InputField ───────────────────────────────────────────────
-const InputField = ({ label, name, value, onChange, placeholder, icon, error, type = 'text', disabled = false }) => (
+const InputField = ({ label, name, value, onChange, placeholder, icon, error, type = 'text', disabled = false, required }) => (
   <div>
     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">
-      {label}
+      {label} {required && <span className="text-red-500">*</span>}
     </label>
     <div className="relative">
       {icon && (
@@ -171,8 +171,36 @@ const Paiement = () => {
     const e = {}
     if (method === 'CARD') {
       if (!card.cardName.trim()) e.cardName = 'Nom requis'
-      if (card.cardNumber.replace(/\s/g, '').length !== 16) e.cardNumber = 'Numéro invalide'
+      if (card.cardNumber.replace(/\s/g, '').length !== 16) e.cardNumber = 'Numéro invalide'      
+      // Validation de la date d'expiration (format MM/YY)
       if (card.expiry.length !== 5) e.expiry = 'Date invalide'
+      if (!/^\d{2}\/\d{2}$/.test(card.expiry)) {
+        e.expiry = 'Date invalide';
+      } else {
+        const [monthStr, yearStr] = card.expiry.split('/');
+
+        const month = parseInt(monthStr, 10);
+        const year = parseInt(yearStr, 10);
+
+        // Vérification du mois
+        if (month < 1 || month > 12) {
+          e.expiry = 'Mois invalide';
+        } else {
+          // La carte expire à la fin du mois indiqué
+          const expiryDate = new Date(
+            2000 + year, // année complète (ex: 26 -> 2026)
+            month,       // mois suivant
+            0,           // dernier jour du mois précédent
+            23, 59, 59, 999
+          );
+
+          const now = new Date();
+
+          if (expiryDate < now) {
+            e.expiry = 'Carte expirée';
+          }
+        }
+      }
       if (card.cvv.length !== 3) e.cvv = 'CVV invalide'
     } else {
       if (!card.phone.trim()) e.phone = 'Numéro requis'
@@ -240,7 +268,7 @@ const Paiement = () => {
         <div className="bg-gray-50 rounded-xl p-4 text-left space-y-2 mb-6">
           <div className="flex justify-between text-sm text-gray-500">
             <span>{qty} billet{qty > 1 ? 's' : ''} {ticketType}</span>
-            <span>{prix * qty} DH</span>
+            <span>{(prix * qty).toFixed(2)} DH</span>
           </div>
           <div className="flex justify-between text-sm text-gray-500">
             <span>Frais de service</span>
@@ -248,7 +276,7 @@ const Paiement = () => {
           </div>
           <div className="flex justify-between text-sm font-bold text-gray-900 pt-2 border-t border-gray-200">
             <span>Total payé</span>
-            <span className="text-blue-600">{total} DH</span>
+            <span className="text-blue-600">{total.toFixed(2)} DH</span>
           </div>
         </div>
 
@@ -322,6 +350,7 @@ const Paiement = () => {
                       icon={<FaUser size={12} />}
                       error={errors.nom}
                       disabled={!!user}
+                      required={true}
                     />
                     <InputField
                       label="Prénom"
@@ -332,6 +361,7 @@ const Paiement = () => {
                       icon={<FaUser size={12} />}
                       error={errors.prenom}
                       disabled={!!user}
+                      required={true}
                     />
                     <InputField
                       label="Email"
@@ -343,6 +373,7 @@ const Paiement = () => {
                       icon={<FaEnvelope size={12} />}
                       error={errors.email}
                       disabled={!!user}
+                      required={true}
                     />
                     <InputField
                       label="Téléphone"
@@ -353,6 +384,7 @@ const Paiement = () => {
                       icon={<FaPhone size={12} />}
                       error={errors.phone}
                       disabled={!!user}
+                      required={true}
                     />
                   </div>
                 </div>
@@ -364,7 +396,7 @@ const Paiement = () => {
                     <InfoItem icon={<FaCalendar size={14} />} label="Date" value={formatDate(event.dateDebut)} />
                     <InfoItem icon={<FaMapMarkerAlt size={14} />} label="Lieu" value={event.ville} />
                     <InfoItem icon={<FaTicketAlt size={14} />} label="Billets" value={`${qty} × ${ticketType}`} />
-                    <InfoItem icon={<FaCreditCard size={14} />} label="Total" value={`${total} DH`} />
+                    <InfoItem icon={<FaCreditCard size={14} />} label="Total" value={`${total.toFixed(2)} DH`} />
                   </div>
                 </div>
 
@@ -415,6 +447,7 @@ const Paiement = () => {
                       onChange={handleCardChange}
                       placeholder="JEAN DUPONT"
                       error={errors.cardName}
+                      required={true}
                     />
                     <div className="relative">
                       <InputField
@@ -424,6 +457,7 @@ const Paiement = () => {
                         onChange={handleCardChange}
                         placeholder="1234 5678 9012 3456"
                         error={errors.cardNumber}
+                        required={true}
                       />
                       <FaCreditCard className="absolute right-4 top-9 text-gray-300" size={16} />
                     </div>
@@ -435,6 +469,7 @@ const Paiement = () => {
                         onChange={handleCardChange}
                         placeholder="MM/AA"
                         error={errors.expiry}
+                        required={true}
                       />
                       <InputField
                         label="CVV"
@@ -443,21 +478,22 @@ const Paiement = () => {
                         onChange={handleCardChange}
                         placeholder="123"
                         error={errors.cvv}
+                        required={true}
                       />
                     </div>
                   </div>
                 )}
                 {method === 'PAYPAL' && (
-  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-    <h2 className="text-base font-bold text-gray-900 mb-3">PayPal</h2>
-    <div className="bg-blue-50 rounded-xl p-4 text-center">
-      <FaPaypal className="text-blue-600 mx-auto mb-2" size={32} />
-      <p className="text-sm text-gray-600">
-        Vous serez redirigé vers PayPal pour finaliser votre paiement de manière sécurisée.
-      </p>
-    </div>
-  </div>
-)}
+                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                    <h2 className="text-base font-bold text-gray-900 mb-3">PayPal</h2>
+                    <div className="bg-blue-50 rounded-xl p-4 text-center">
+                      <FaPaypal className="text-blue-600 mx-auto mb-2" size={32} />
+                      <p className="text-sm text-gray-600">
+                        Vous serez redirigé vers PayPal pour finaliser votre paiement de manière sécurisée.
+                      </p>
+                    </div>
+                  </div>
+                )}
                 {/* Mobile */}
                 {method === 'MOBILE' && (
                   <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
@@ -471,6 +507,7 @@ const Paiement = () => {
                       placeholder="+212 6XX XXX XXX"
                       icon={<FaPhone size={12} />}
                       error={errors.phone}
+                      required={true}
                     />
                   </div>
                 )
@@ -496,7 +533,7 @@ const Paiement = () => {
                       Traitement en cours...
                     </>
                   ) : (
-                    <><FaLock size={12} /> Payer {total} DH</>
+                    <><FaLock size={12} /> Payer {total.toFixed(2)} DH</>
                   )}
                 </button>
               </>
@@ -521,7 +558,7 @@ const Paiement = () => {
               <div className="bg-gray-50 rounded-xl p-4 mb-4 space-y-2">
                 <div className="flex justify-between text-sm text-gray-500">
                   <span>{prix} DH × {qty}</span>
-                  <span>{prix * qty} DH</span>
+                  <span>{(prix * qty).toFixed(2)} DH</span>
                 </div>
                 <div className="flex justify-between text-sm text-gray-500">
                   <span>Frais de service</span>
@@ -529,7 +566,7 @@ const Paiement = () => {
                 </div>
                 <div className="flex justify-between text-sm font-bold text-gray-900 pt-2 border-t border-gray-200">
                   <span>Total</span>
-                  <span className="text-blue-600">{total} DH</span>
+                  <span className="text-blue-600">{total.toFixed(2)} DH</span>
                 </div>
               </div>
 
