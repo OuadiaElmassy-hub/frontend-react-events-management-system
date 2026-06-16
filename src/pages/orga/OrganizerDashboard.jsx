@@ -3489,7 +3489,7 @@ export default function OrganisateurDashboard() {
       <div className="p-5 border-b border-gray-100 flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 bg-white/40 rounded-xl flex items-center justify-center shadow">
-            <img src={rovistaLogo} alt="Rovista" className="h-10 w-10" />
+            <img src={rovistaLogo} alt="AtlasEvents" className="h-10 w-10" />
           </div>
           <div>
             <p className="font-bold text-gray-900 text-sm">AtlasEvents</p>

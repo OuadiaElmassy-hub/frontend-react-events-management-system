@@ -955,7 +955,7 @@ export default function ClientDashboard() {
             <FaCalendarAlt className="text-white text-sm" />
           </div> */}
           <div className="w-16 h-16 bg-white/40 rounded-xl flex items-center justify-center backdrop-blur-sm shadow-lg">
-            <img src={rovistaLogo} alt="Rovista" className="h-14 w-14" />
+            <img src={rovistaLogo} alt="AtlasEvents" className="h-14 w-14" />
           </div>
           <div>
             <p className="font-bold text-gray-900 text-sm">AtlasEvents</p>

@@ -10,7 +10,7 @@ import {
 import rovistaLogo from '../assets/logos/rovista.svg'
 import { useAuth } from "../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import apiFetch , { BASE_URL } from "../utils/fetchFn";
 
 
@@ -1131,7 +1131,7 @@ const ForgotPasswordPage = ({ onNavigate }) => {
         </div> */}
         <div className="lg:hidden flex items-center gap-3 mb-6">
             <div className="w-16 h-16 bg-white/40 rounded-xl flex items-center justify-center backdrop-blur-sm shadow-lg">
-              <img src={rovistaLogo} alt="Rovista" className="h-14 w-14" />
+              <img src={rovistaLogo} alt="AtlasEvents" className="h-14 w-14" />
             </div>
             <div>
               <span className="font-bold text-xl text-gray-900">AtlasEvents</span>
@@ -1214,10 +1214,20 @@ const ForgotPasswordPage = ({ onNavigate }) => {
 // Utilisez onNavigate pour intégrer avec React Router si besoin
 // ═══════════════════════════════════════════════════════════════
 export default function AuthPages() {
-  const [currentPage, setCurrentPage] = useState("login");
-  const { login } = useAuth(); // ← ajouter
   
-  // const handleSuccess = (roles) => {
+  //const [currentPage, setCurrentPage] = useState("login");
+  // remplacé par :
+  const { login } = useAuth(); // ← ajouter
+  const location = useLocation(); // déjà importé
+  
+  // Lire le param ?page= au montage
+  const getInitialPage = () => {
+    const params = new URLSearchParams(location.search);
+    const page = params.get("page");
+    const valid = ["login", "register-client", "register-organisateur", "forgot-password"];
+    return valid.includes(page) ? page : "login";
+  };  
+  const [currentPage, setCurrentPage] = useState(getInitialPage);
 
   const handleSuccess = (jwt) => {
     login(jwt); // ← stocke token + décode user dans le contexte

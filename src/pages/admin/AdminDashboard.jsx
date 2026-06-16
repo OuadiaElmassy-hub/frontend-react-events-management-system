@@ -2022,7 +2022,7 @@ const apiFetchMultipart = async (path, method, formData) => {
 
 // Aperçu icône d'une catégorie
 const CategoryIcon = ({ iconUrl, couleur, nom }) => {
-  const URL_ICONS = BASE_URL || "";
+  const URL_ICONS = 'http://localhost:8080';
   if (iconUrl) {
     return (
       <img src={`${URL_ICONS}${iconUrl}`} alt={nom}

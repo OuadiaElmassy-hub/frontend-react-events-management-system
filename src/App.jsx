@@ -20,6 +20,7 @@ import AuthPages from './pages/AuthPages'
 import UnauthorizedPage from './pages/UnauthorizedPage'
 import Organisateurs from './pages/Organisateurs'
 import Paiement from './pages/Paiement'
+import OrganisateurLandingPage from './pages/OrganisateurLandingPage'
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/events" element={<Evenements />} />
+            <Route path="/organisateurs" element={<OrganisateurLandingPage />} />
             <Route path="/events/:id" element={<EventDetail />} />
             <Route path="/organisateurs" element={<Organisateurs />} />
             <Route path="/paiement/:id" element={<Paiement />} />

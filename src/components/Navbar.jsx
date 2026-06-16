@@ -278,7 +278,7 @@ export default function Navbar() {
                   className="hidden md:inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors">
                   Connexion
                 </Link>
-                <Link to="/auth"
+                <Link to="/auth?page=register-client"
                   className="hidden md:inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-all">
                   S'inscrire
                 </Link>
@@ -394,7 +394,7 @@ export default function Navbar() {
                   className="flex items-center justify-center w-full px-4 py-2.5 text-sm font-medium text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
                   Connexion
                 </Link>
-                <Link to="/auth" onClick={closeMenu}
+                <Link to="/auth?page=register-client" onClick={closeMenu}
                   className="flex items-center justify-center w-full px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors">
                   S'inscrire
                 </Link>

@@ -13,7 +13,7 @@ const FOOTER_DATA = {
          ],
       },
       {
-         title: "Rovista",
+         title: "AtlasEvents",
          links: [
             { name: "À propos de nous", to: "/#about" },
             { name: "Devenir Organisateur", to: "/organisateurs" },
@@ -103,7 +103,7 @@ export default function Footer() {
                   </ul>
 
                   <div className="!mt-8">
-                     <h6 className="text-sm text-slate-300 font-medium">Newsletter Rovista</h6>
+                     <h6 className="text-sm text-slate-300 font-medium">Newsletter AtlasEvents</h6>
                      <p className="text-xs text-slate-400 mt-1">Recevez les meilleurs événements culturels et touristiques du Maroc.</p>
                      <div className="mt-4">
                         <Link
@@ -121,7 +121,7 @@ export default function Footer() {
 
             <div className="text-center">
                <p className="text-slate-500 text-xs">
-                  &copy; {new Date().getFullYear()} Rovista. Tous droits réservés. Plateforme marocaine des événements et du tourisme.
+                  &copy; {new Date().getFullYear()} AtlasEvents. Tous droits réservés. Plateforme marocaine des événements et du tourisme.
                </p>
             </div>
          </div>
