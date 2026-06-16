@@ -39,7 +39,7 @@ function App() {
             <Route path="/events" element={<Evenements />} />
             <Route path="/events/:id" element={<EventDetail />} />
             <Route path="/organisateurs" element={<Organisateurs />} />
-            <Route path="/payment" element={<Paiement />} />
+            <Route path="/paiement/:id" element={<Paiement />} />
           </Route>
 
           {/* Routes protégées par rôle */}
