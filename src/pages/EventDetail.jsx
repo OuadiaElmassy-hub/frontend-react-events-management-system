@@ -666,6 +666,7 @@ const EventDetail = () => {
   const AVIS_SIZE = 5
 
   const [qty, setQty] = useState(1)
+  const [ticketType, setTicketType] = useState('NORMALE')
   const [liked, setLiked] = useState(false)
   const [showFullDesc, setShowFullDesc] = useState(false)
   const [clientsMap, setClientsMap] = useState({})
@@ -774,14 +775,17 @@ const EventDetail = () => {
       setGallerieIndex(i => (i + 1) % event.imagesUrls.length)
     }, 4000)
   }
+  const handleTypeChange = (type) => {
+  setTicketType(type)
+  const max = type === 'VIP'
+    ? event.placesVIPRestantes
+    : event.placesRestants - event.placesVIPRestantes
+  if (qty > max) setQty(max === 0 ? 0 : max)
+}
 
   const handleReserve = () => {
-    if (!user) {
-      navigate(`/login?redirect=/events/${id}`)
-      return
-    }
-    navigate(`/reservation/${id}?qty=${qty}`)
-  }
+  navigate(`/paiement/${id}`, { state: { event, qty, ticketType, prixUnitaire } })
+}
 
   if (loading) return <Skeleton />
   if (!event) return (
@@ -793,8 +797,15 @@ const EventDetail = () => {
     </div>
   )
 
-  const total = event.prix * qty
+  const placesNormalesRestantes = event.placesRestants - event.placesVIPRestantes
+const placesRestantesPourType = ticketType === 'VIP'
+  ? event.placesVIPRestantes
+  : placesNormalesRestantes
+
+  const prixUnitaire = ticketType === 'VIP' ? event.prixVIP : event.prix
+  const total = prixUnitaire * qty
   const fraisService = 5
+  
   
   // ──✓ Correction 2 : Priorité à la note globale du backend, fallback sur les éléments chargés
   const moyenneAvis = event.noteMoyenne 
@@ -1077,18 +1088,79 @@ const EventDetail = () => {
                 <span className="text-sm text-gray-400">/ personne</span>
               </div>
 
-              <div className="mb-4">
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Nombre de billets</label>
-                <div className="flex items-center gap-3">
-                  <button onClick={() => setQty(q => Math.max(1, q - 1))} className="w-9 h-9 rounded-xl border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors font-bold">−</button>
-                  <span className="text-lg font-bold text-gray-900 w-8 text-center">{qty}</span>
-                  <button onClick={() => setQty(q => Math.min(8, q + 1))} className="w-9 h-9 rounded-xl border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors font-bold">+</button>
-                </div>
-              </div>
+              {/* Quantité */}
+<div className="mb-4">
+  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">
+    Nombre de billets
+  </label>
+  <div className="flex items-center gap-3">
+    <button
+      onClick={() => setQty(q => Math.max(1, q - 1))}
+      className="w-9 h-9 rounded-xl border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors font-bold"
+    >−</button>
+    <span className="text-lg font-bold text-gray-900 w-8 text-center">{qty}</span>
+    <button
+      onClick={() => setQty(q => Math.min(placesRestantesPourType, q + 1))}
+      className="w-9 h-9 rounded-xl border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors font-bold"
+    >+</button>
+  </div>
+</div>
+
+{/* Type de billet */}
+<div className="mb-4">
+  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">
+    Type de billet
+  </label>
+  <div className="flex gap-3">
+
+    {/* NORMALE */}
+    <button
+      onClick={() => handleTypeChange('NORMALE')}
+      disabled={placesNormalesRestantes === 0}
+      className={`flex-1 py-2.5 rounded-xl border-2 text-sm font-semibold transition-all ${
+        ticketType === 'NORMALE'
+          ? 'border-blue-600 bg-blue-50 text-blue-600'
+          : placesNormalesRestantes === 0
+          ? 'border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed'
+          : 'border-gray-200 text-gray-500 hover:border-gray-300'
+      }`}
+    >
+      <p>Normale</p>
+      <p className="text-xs font-normal mt-0.5">
+        {placesNormalesRestantes === 0
+          ? 'Complet'
+          : `${placesNormalesRestantes} places`}
+      </p>
+    </button>
+
+    {/* VIP */}
+    <button
+      onClick={() => handleTypeChange('VIP')}
+      disabled={event.placesVIPRestantes === 0 || event.nbPlaceVIP === 0}
+      className={`flex-1 py-2.5 rounded-xl border-2 text-sm font-semibold transition-all ${
+        ticketType === 'VIP'
+          ? 'border-yellow-500 bg-yellow-50 text-yellow-600'
+          : event.placesVIPRestantes === 0 || event.nbPlaceVIP === 0
+          ? 'border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed'
+          : 'border-gray-200 text-gray-500 hover:border-gray-300'
+      }`}
+    >
+      <p>⭐ VIP</p>
+      <p className="text-xs font-normal mt-0.5">
+        {event.nbPlaceVIP === 0
+          ? 'Non disponible'
+          : event.placesVIPRestantes === 0
+          ? 'Complet'
+          : `${event.placesVIPRestantes} places`}
+      </p>
+    </button>
+
+  </div>
+</div>
 
               <div className="bg-gray-50 rounded-xl p-4 mb-5 space-y-2">
                 <div className="flex justify-between text-sm text-gray-500">
-                  <span>{event.prix} DH × {qty}</span>
+                  <span>{prixUnitaire} DH × {qty}</span>
                   <span>{total} DH</span>
                 </div>
                 <div className="flex justify-between text-sm text-gray-500">
