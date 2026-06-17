@@ -130,16 +130,15 @@ const Paiement = () => {
 
   // Auto-remplir si connecté
   useEffect(() => {
-    console.log('USER:', user) 
-    if (user) {
-      setVisiteur({
-        nom: user.nom || user.sub || '',
-        prenom: user.prenom || '',
-        email: user.email || '',
-        phone: user.phone || '',
-      })
-    }
-  }, [user])
+  if (user) {
+    setVisiteur({
+      nom: user.nom || '',
+      prenom: user.prenom || '',
+      email: user.email || '',
+      phone: user.phone || '',
+    })
+  }
+}, [user])
 
   const handleVisiteurChange = (e) => {
     const { name, value } = e.target
