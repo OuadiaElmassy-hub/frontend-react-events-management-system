@@ -155,8 +155,7 @@ const DashboardHome = ({ onNavigate }) => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 mb-1">
-            {/* Bonjour{stats?.prenom ? `, ${stats.prenom}` : ""} */}
-            Bonjour{user?.nom ? `, ${user.prenom}` : ""} 👋
+            Bonjour{user?.prenom ? `, ${user.prenom}` : user?.nom ? `, ${user.nom}` : ""} 👋
           </h2>
           <p className="text-gray-500 text-sm">Voici un aperçu de votre activité</p>
         </div>
@@ -956,7 +955,7 @@ export default function ClientDashboard() {
             <FaCalendarAlt className="text-white text-sm" />
           </div> */}
           <div className="w-16 h-16 bg-white/40 rounded-xl flex items-center justify-center backdrop-blur-sm shadow-lg">
-            <img src={rovistaLogo} alt="Rovista" className="h-14 w-14" />
+            <img src={rovistaLogo} alt="AtlasEvents" className="h-14 w-14" />
           </div>
           <div>
             <p className="font-bold text-gray-900 text-sm">AtlasEvents</p>

@@ -3,12 +3,14 @@ import {
   FaEye, FaEyeSlash, FaCalendarAlt, FaUser, FaEnvelope,
   FaLock, FaPhone, FaMapMarkerAlt, FaBuilding, FaIdCard,
   FaSpinner, FaCheckCircle, FaArrowRight, FaArrowLeft,
-  FaTicketAlt, FaStar, FaUsers, FaHome
+  FaTicketAlt, FaStar, FaUsers, FaHome,
+  FaUserCircle,
+  FaIdBadge
 } from "react-icons/fa";
 import rovistaLogo from '../assets/logos/rovista.svg'
 import { useAuth } from "../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import apiFetch , { BASE_URL } from "../utils/fetchFn";
 
 
@@ -462,7 +464,7 @@ const LoginPage = ({ onNavigate, onSuccess }) => {
 // ═══════════════════════════════════════════════════════════════
 const RegisterClientPage = ({ onNavigate, onSuccess }) => {
   const [form, setForm] = useState({
-    nom: "", username: "", email: "",
+    nom: "", prenom: "", username: "", email: "",
     phone: "", ville: "",
     password: "", confirmPassword: "",
   });
@@ -477,6 +479,7 @@ const RegisterClientPage = ({ onNavigate, onSuccess }) => {
   const validate = () => {
     const errs = {};
     if (!form.nom.trim())              errs.nom      = "Le nom est requis";
+    if (!form.prenom.trim())              errs.prenom      = "Le prenom est requis";
     if (!form.username.trim())         errs.username = "Le nom d'utilisateur est requis";
     if (!form.email.includes("@"))     errs.email    = "Email invalide";
     if (form.password.length < 8)      errs.password = "8 caractères minimum";
@@ -573,23 +576,24 @@ const RegisterClientPage = ({ onNavigate, onSuccess }) => {
               {/* Nom + Username */}
               <div className="grid grid-cols-2 gap-4">
                 <InputField
-                  label="Nom complet"
+                  label="Votre nom "
                   name="nom"
                   value={form.nom}
                   onChange={handleChange}
-                  placeholder="Sophie Martin"
-                  icon={<FaUser />}
+                  placeholder="EL MASSY"
+                  icon={<FaIdBadge />}
                   required
                   error={errors.nom}
                 />
                 <InputField
-                  label="Nom d'utilisateur"
-                  name="username"
-                  value={form.username}
+                  label="Votre prénom "
+                  name="prenom"
+                  value={form.prenom}
                   onChange={handleChange}
-                  placeholder="sophie_m"
+                  placeholder="Ouadiâ"
+                  icon={<FaIdBadge />}
                   required
-                  error={errors.username}
+                  error={errors.prenom}
                 />
               </div>
 
@@ -600,7 +604,7 @@ const RegisterClientPage = ({ onNavigate, onSuccess }) => {
                 type="email"
                 value={form.email}
                 onChange={handleChange}
-                placeholder="sophie@example.com"
+                placeholder="elmassy@example.com"
                 icon={<FaEnvelope />}
                 required
                 error={errors.email}
@@ -633,6 +637,20 @@ const RegisterClientPage = ({ onNavigate, onSuccess }) => {
                     </select>
                   </div>
                 </div>
+              </div>
+              
+              {/* User name */}
+              <div className="space-y-1.5">
+                <InputField
+                  label="Nom d'utilisateur"
+                  name="username"
+                  value={form.username}
+                  onChange={handleChange}
+                  placeholder="El_massy_Ouadia"
+                  icon={<FaUser />}
+                  required
+                  error={errors.username}
+                />
               </div>
 
               {/* Mot de passe */}
@@ -722,7 +740,7 @@ const RegisterorganisateurPage = ({ onNavigate, onSuccess }) => {
   const [form, setForm]         = useState({
     // Étape 1
     nom: "", username: "", email: "",
-    phone: "", adresse: "",
+    phone: "", adresse: "", prenom: "",
     password: "", confirmPassword: "",
     // Étape 2
     organisationNom: "", siret: "",
@@ -738,6 +756,7 @@ const RegisterorganisateurPage = ({ onNavigate, onSuccess }) => {
   const validateStep1 = () => {
     const errs = {};
     if (!form.nom.trim())          errs.nom      = "Requis";
+    if (!form.prenom.trim())          errs.prenom      = "Requis";
     if (!form.username.trim())     errs.username = "Requis";
     if (!form.email.includes("@")) errs.email    = "Email invalide";
     if (form.password.length < 8)  errs.password = "8 caractères minimum";
@@ -882,23 +901,25 @@ const RegisterorganisateurPage = ({ onNavigate, onSuccess }) => {
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <InputField
-                    label="Nom complet"
+                    label="Nom de responsable"
                     name="nom"
                     value={form.nom}
                     onChange={handleChange}
-                    placeholder="Amine Benali"
-                    icon={<FaUser />}
+                    placeholder="EL MASSY"
+                    icon={<FaIdBadge />}
                     required
                     error={errors.nom}
                   />
+                  
                   <InputField
-                    label="Nom d'utilisateur"
-                    name="username"
-                    value={form.username}
+                    label="Prénom de responsable"
+                    name="prenom"
+                    value={form.prenom}
                     onChange={handleChange}
-                    placeholder="amine_b"
+                    placeholder="Ouadiâ"
                     required
-                    error={errors.username}
+                    icon={<FaIdBadge />}
+                    error={errors.prenom}
                   />
                 </div>
 
@@ -931,6 +952,19 @@ const RegisterorganisateurPage = ({ onNavigate, onSuccess }) => {
                     onChange={handleChange}
                     placeholder="Casablanca"
                     icon={<FaMapMarkerAlt />}
+                  />
+                </div>
+                {/* User name */}
+                <div className="space-y-1.5">
+                  <InputField
+                    label="Nom d'utilisateur"
+                    name="username"
+                    value={form.username}
+                    onChange={handleChange}
+                    placeholder="El_massy_Ouadia"
+                    icon={<FaUser />}
+                    required
+                    error={errors.username}
                   />
                 </div>
 
@@ -1097,7 +1131,7 @@ const ForgotPasswordPage = ({ onNavigate }) => {
         </div> */}
         <div className="lg:hidden flex items-center gap-3 mb-6">
             <div className="w-16 h-16 bg-white/40 rounded-xl flex items-center justify-center backdrop-blur-sm shadow-lg">
-              <img src={rovistaLogo} alt="Rovista" className="h-14 w-14" />
+              <img src={rovistaLogo} alt="AtlasEvents" className="h-14 w-14" />
             </div>
             <div>
               <span className="font-bold text-xl text-gray-900">AtlasEvents</span>
@@ -1180,10 +1214,20 @@ const ForgotPasswordPage = ({ onNavigate }) => {
 // Utilisez onNavigate pour intégrer avec React Router si besoin
 // ═══════════════════════════════════════════════════════════════
 export default function AuthPages() {
-  const [currentPage, setCurrentPage] = useState("login");
-  const { login } = useAuth(); // ← ajouter
   
-  // const handleSuccess = (roles) => {
+  //const [currentPage, setCurrentPage] = useState("login");
+  // remplacé par :
+  const { login } = useAuth(); // ← ajouter
+  const location = useLocation(); // déjà importé
+  
+  // Lire le param ?page= au montage
+  const getInitialPage = () => {
+    const params = new URLSearchParams(location.search);
+    const page = params.get("page");
+    const valid = ["login", "register-client", "register-organisateur", "forgot-password"];
+    return valid.includes(page) ? page : "login";
+  };  
+  const [currentPage, setCurrentPage] = useState(getInitialPage);
 
   const handleSuccess = (jwt) => {
     login(jwt); // ← stocke token + décode user dans le contexte

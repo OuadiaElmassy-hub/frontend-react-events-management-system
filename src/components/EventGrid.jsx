@@ -92,7 +92,7 @@ const EventGrid = ({ events }) => {
 
   // 2. Optionnel : Squelette de chargement initial (Uniquement au tout premier montage global si nécessaire)
   // Note : Il est préférable de laisser les cartes s'afficher même si l'objet est vide.
-  // Si tu veux un loader global propre pour Rovista pendant que TOUT charge :
+  // Si tu veux un loader global propre pour AtlasEvents pendant que TOUT charge :
   if (isLoadingCats && Object.keys(categoriesMap).length === 0 && events.length === 0) {
     return (
       <div className="flex justify-center items-center py-20">

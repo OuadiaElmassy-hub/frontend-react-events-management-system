@@ -763,7 +763,7 @@ const EventDetail = () => {
   useEffect(() => {
     if (!event?.images?.length) return
     intervalRef.current = setInterval(() => {
-      setGallerieIndex(i => (i + 1) % event.images.length)
+      setGallerieIndex(i => (i + 1) % event.imagesUrls.length)
     }, 4000)
     return () => clearInterval(intervalRef.current)
   }, [event])
@@ -772,7 +772,7 @@ const EventDetail = () => {
     clearInterval(intervalRef.current)
     setGallerieIndex(index)
     intervalRef.current = setInterval(() => {
-      setGallerieIndex(i => (i + 1) % event.images.length)
+      setGallerieIndex(i => (i + 1) % event.imagesUrls.length)
     }, 4000)
   }
   const handleTypeChange = (type) => {
@@ -821,9 +821,9 @@ const placesRestantesPourType = ticketType === 'VIP'
     <div className="min-h-screen bg-gray-50">
       {/* ── Hero image ── */}
       <div className="relative h-80 md:h-96 overflow-hidden">
-        {event.images?.length > 0 ? (
+        {event.imagesUrls?.length > 0 ? (
           <>
-            {event.images.map((url, i) => (
+            {event.imagesUrls.map((url, i) => (
               <img
                 key={i}
                 src={`${API_BASE_URL}${url}`}
@@ -834,17 +834,17 @@ const placesRestantesPourType = ticketType === 'VIP'
               />
             ))}
 
-            {event.images.length > 1 && (
+            {event.imagesUrls.length > 1 && (
               <>
                 <button
-                  onClick={() => goTo((gallerieIndex - 1 + event.images.length) % event.images.length)}
+                  onClick={() => goTo((gallerieIndex - 1 + event.imagesUrls.length) % event.imagesUrls.length)}
                   className="absolute left-4 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/40 hover:bg-black/60 text-white rounded-full flex items-center justify-center transition-all z-10"
                   aria-label="Image précédente"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M15 18l-6-6 6-6"/></svg>
                 </button>
                 <button
-                  onClick={() => goTo((gallerieIndex + 1) % event.images.length)}
+                  onClick={() => goTo((gallerieIndex + 1) % event.imagesUrls.length)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/40 hover:bg-black/60 text-white rounded-full flex items-center justify-center transition-all z-10"
                   aria-label="Image suivante"
                 >
@@ -852,7 +852,7 @@ const placesRestantesPourType = ticketType === 'VIP'
                 </button>
 
                 <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
-                  {event.images.map((_, i) => (
+                  {event.imagesUrls.map((_, i) => (
                     <button
                       key={i}
                       onClick={() => goTo(i)}
@@ -865,7 +865,7 @@ const placesRestantesPourType = ticketType === 'VIP'
                 </div>
 
                 <div className="absolute top-4 right-16 bg-black/40 text-white text-xs px-2.5 py-1 rounded-full z-10">
-                  {gallerieIndex + 1} / {event.images.length}
+                  {gallerieIndex + 1} / {event.imagesUrls.length}
                 </div>
               </>
             )}
@@ -1136,18 +1136,18 @@ const placesRestantesPourType = ticketType === 'VIP'
     {/* VIP */}
     <button
       onClick={() => handleTypeChange('VIP')}
-      disabled={event.placesVIPRestantes === 0 || event.nbPlaceVIP === 0}
+      disabled={event.placesVIPRestantes === 0 || event.nbPlacesVIP === 0}
       className={`flex-1 py-2.5 rounded-xl border-2 text-sm font-semibold transition-all ${
         ticketType === 'VIP'
           ? 'border-yellow-500 bg-yellow-50 text-yellow-600'
-          : event.placesVIPRestantes === 0 || event.nbPlaceVIP === 0
+          : event.placesVIPRestantes === 0 || event.nbPlacesVIP === 0
           ? 'border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed'
           : 'border-gray-200 text-gray-500 hover:border-gray-300'
       }`}
     >
       <p>⭐ VIP</p>
       <p className="text-xs font-normal mt-0.5">
-        {event.nbPlaceVIP === 0
+        {event.nbPlacesVIP === 0
           ? 'Non disponible'
           : event.placesVIPRestantes === 0
           ? 'Complet'
@@ -1161,7 +1161,7 @@ const placesRestantesPourType = ticketType === 'VIP'
               <div className="bg-gray-50 rounded-xl p-4 mb-5 space-y-2">
                 <div className="flex justify-between text-sm text-gray-500">
                   <span>{prixUnitaire} DH × {qty}</span>
-                  <span>{total} DH</span>
+                  <span>{total.toFixed(2)} DH</span>
                 </div>
                 <div className="flex justify-between text-sm text-gray-500">
                   <span>Frais de service</span>
@@ -1169,7 +1169,7 @@ const placesRestantesPourType = ticketType === 'VIP'
                 </div>
                 <div className="flex justify-between text-sm font-bold text-gray-900 pt-2 border-t border-gray-200">
                   <span>Total</span>
-                  <span className="text-blue-600">{total + fraisService} DH</span>
+                  <span className="text-blue-600">{(total + fraisService).toFixed(2)} DH</span>
                 </div>
               </div>
 

@@ -1,8 +1,8 @@
 import {api} from "./api";
 
 export const getCategories = async () => {
-    const respons = await api.get('/public/categories');
-    return respons.data;
+    const response = await api.get('/public/categories');
+    return response.data;
 }
 
 
