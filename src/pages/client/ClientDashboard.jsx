@@ -1039,7 +1039,7 @@ export default function ClientDashboard() {
 
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
-        <header className=" bg-white border-b border-gray-100 px-6 py-3.5 flex items-center justify-between shadow-sm">
+        <header className=" bg-white border-b border-gray-100 px-6 py-3.5 flex items-center justify-between shadow-sm flex-shrink-0 z-10">
           {/* Gauche : hamburger + recherche */}
           <div className="flex items-center gap-4">
             <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-gray-500 hover:text-gray-700">
@@ -1080,7 +1080,7 @@ export default function ClientDashboard() {
           </div>
 
         </header>
-        <main className="flex-1 p-6 overflow-auto">
+        <main className="flex-1 overflow-y-auto p-6">
           {pages[page]}
         </main>
       </div>
