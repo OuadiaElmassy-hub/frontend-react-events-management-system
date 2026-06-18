@@ -11,7 +11,7 @@ export default function MainLayout() {
       <main className="flex-1">
         <Outlet />  {/* ← la page s'affiche ici */}
       </main>
-      <ChatBot />
+      {/* <ChatBot /> */}
       <Footer />
     </div>
   )
