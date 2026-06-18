@@ -828,7 +828,7 @@ const placesRestantesPourType = ticketType === 'VIP'
                 key={i}
                 src={`${API_BASE_URL}${url}`}
                 alt={`${event.titre} - photo ${i + 1}`}
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+                className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-700 ${
                   i === gallerieIndex ? 'opacity-100' : 'opacity-0'
                 }`}
               />

@@ -173,7 +173,6 @@ const Evenements = () => {
       {/* Search bar */}
       <div className="bg-white border-b border-gray-100 px-4 py-6">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Événements</h1>
           <SearchBar onSearch={handleSearch} defaultValue={searchQuery} />
         </div>
       </div>

@@ -133,13 +133,22 @@ export default function OrganisateurLandingPage() {
               <span className="text-base">🇲🇦</span> Plus de 1 200 expériences touristiques au Maroc
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-6 tracking-tight">
+            {/* <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-6 tracking-tight">
               Découvrez et partagez les meilleures <span className="text-amber-400">expériences</span> touristiques du Maroc
             </h1>
 
             <p className="text-base md:text-lg lg:text-xl text-white/80 mb-8 leading-relaxed max-w-2xl">
               Randonnées dans l'Atlas, festivals culturels, excursions dans le désert, événements gastronomiques et expériences locales : une seule plateforme pour explorer le Maroc.            
+            </p> */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-6 tracking-tight">
+              Valorisez vos <span className="text-amber-400">événements</span> et touchez un public plus large
+            </h1>
+
+            <p className="text-base md:text-lg lg:text-xl text-white/80 mb-8 leading-relaxed max-w-2xl">
+              Publiez vos activités touristiques, culturelles ou gastronomiques sur notre plateforme et profitez d’une visibilité accrue auprès des visiteurs. 
+              Simplifiez la gestion de vos réservations, développez votre audience et faites découvrir vos événements à travers tout le Maroc.
             </p>
+
 
             <div className="flex flex-wrap items-center gap-4">
               <JoinButton size="lg" />

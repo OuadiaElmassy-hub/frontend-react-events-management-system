@@ -103,10 +103,13 @@ export default function Navbar() {
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-lg shrink-0"
-            aria-label="Rovista - Accueil"
+            className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-lg shrink-0"
+            aria-label="AtlasEvents - Accueil"
           >
-            <img src={rovistaLogo} alt="Rovista" className="h-16 w-auto" />
+            <img src={rovistaLogo} alt="AtlasEvents" className="h-16 w-auto" />
+            <span className=" md:text-2xl font-bold tracking-tight text-2xl  text-green-900">
+              Atlas<span className="text-yellow-600">Events</span>
+            </span>
           </Link>
 
           {/* Desktop links */}
