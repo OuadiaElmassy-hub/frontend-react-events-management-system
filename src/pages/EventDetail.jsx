@@ -595,7 +595,7 @@ import { getPublishedEventById } from '../services/eventService'
 import { getListAvisByEventId } from '../services/avisService'
 import { getClientById } from '../services/clientService' // ──✓ Correction 1 : Import ajouté
 import { useAuth } from '../context/AuthContext'
-
+import api from '../services/api'
 const API_BASE_URL = 'http://localhost:8080'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -648,7 +648,106 @@ const Skeleton = () => (
     </div>
   </div>
 )
+const AvisForm = ({ eventId, userId, onAvisAdded }) => {
+  const [note, setNote] = useState(0)
+  const [hoverNote, setHoverNote] = useState(0)
+  const [comment, setComment] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState(false)
 
+  const handleSubmit = async () => {
+    if (note === 0) { setError('Veuillez choisir une note'); return }
+    if (!comment.trim()) { setError('Veuillez écrire un commentaire'); return }
+
+    setLoading(true)
+    setError('')
+
+    try {
+      await api.post(
+        `/client/events/${eventId}/avis?note=${note}&comment=${encodeURIComponent(comment)}`
+      )
+      setSuccess(true)
+      setNote(0)
+      setComment('')
+      onAvisAdded()
+    } catch (err) {
+      setError(err.response?.data?.message || 'Erreur lors de l\'envoi')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (success) return (
+    <div className="bg-green-50 rounded-xl p-4 text-center">
+      <FaCheckCircle className="text-green-500 mx-auto mb-2" size={24} />
+      <p className="text-sm text-green-700 font-medium">Avis envoyé avec succès !</p>
+    </div>
+  )
+
+  return (
+    <div className="space-y-4">
+      {/* Étoiles */}
+      <div>
+        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">
+          Note
+        </label>
+        <div className="flex gap-1">
+          {[1, 2, 3, 4, 5].map(i => (
+            <button
+              key={i}
+              onClick={() => setNote(i)}
+              onMouseEnter={() => setHoverNote(i)}
+              onMouseLeave={() => setHoverNote(0)}
+              className="transition-transform hover:scale-110"
+            >
+              <FaStar
+                size={28}
+                className={i <= (hoverNote || note)
+                  ? 'text-yellow-400'
+                  : 'text-gray-200'}
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Commentaire */}
+      <div>
+        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">
+          Commentaire
+        </label>
+        <textarea
+          value={comment}
+          onChange={e => setComment(e.target.value)}
+          placeholder="Partagez votre expérience..."
+          rows={3}
+          className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+        />
+      </div>
+
+      {error && (
+        <p className="text-xs text-red-500">{error}</p>
+      )}
+
+      <button
+        onClick={handleSubmit}
+        disabled={loading}
+        className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2"
+      >
+        {loading ? (
+          <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+          </svg>
+        ) : (
+          <FaStar size={12} />
+        )}
+        {loading ? 'Envoi...' : 'Publier mon avis'}
+      </button>
+    </div>
+  )
+}
 // ─── EventDetail ──────────────────────────────────────────────────────────────
 const EventDetail = () => {
   const { id } = useParams()
@@ -1074,6 +1173,34 @@ const placesRestantesPourType = ticketType === 'VIP'
 
                   <p className="text-[11px] text-gray-400 text-center mt-2">
                     {avisPage * AVIS_SIZE + 1}–{Math.min((avisPage + 1) * AVIS_SIZE, avisTotalElements)} sur {avisTotalElements} avis
+                    
+                    {/* ── Formulaire avis ── */}
+<div className="mt-6 pt-6 border-t border-gray-100">
+  <h3 className="text-sm font-bold text-gray-900 mb-4">
+    Laisser un avis
+  </h3>
+
+  {!user ? (
+    // Non connecté
+    <div className="bg-gray-50 rounded-xl p-4 text-center">
+      <p className="text-sm text-gray-500 mb-3">
+        Connectez-vous pour laisser un avis
+      </p>
+      <Link
+        to={`/auth?redirect=/events/${id}`}
+        className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all"
+      >
+        Se connecter
+      </Link>
+    </div>
+  ) : (
+    // Connecté → formulaire
+    <AvisForm eventId={id} userId={user.id} onAvisAdded={() => {
+      // Recharge les avis après soumission
+      window.location.reload()
+    }} />
+  )}
+</div>
                   </p>
                 </>
               )}
@@ -1188,7 +1315,7 @@ const placesRestantesPourType = ticketType === 'VIP'
                 </p>
               )}
 
-              <p className="text-[11px] text-gray-400 text-center mt-3 leading-relaxed">🔒 Paiement sécurisé · Annulation gratuite jusqu'à 48h avant</p>
+              
 
               {event.placesDisponibles != null && event.placesDisponibles <= 20 && event.placesDisponibles > 0 && (
                 <div className="mt-3 flex items-center gap-2 bg-orange-50 border border-orange-100 rounded-xl px-3 py-2">
