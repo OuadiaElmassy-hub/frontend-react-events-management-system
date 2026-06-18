@@ -2298,7 +2298,7 @@ const EMPTY_FORM = {
   dateDebut: "", dateFin: "",
   ville: "", lieuSpecifique: "",
   capacite: "", nbPlacesVIP: "",
-  prix: "",
+  prix: "", prixVIP: "",
   categorieId: "",
   statutEvenement: "BROUILLON",
 };
@@ -2377,7 +2377,7 @@ const EventsPage = ({ defaultShowForm = false, toast }) => {
         ville: form.ville, lieuSpecifique: form.lieuSpecifique,
         capacite: +form.capacite, nbPlacesVIP: form.nbPlacesVIP ? +form.nbPlacesVIP : 0,
         prix: +form.prix, categorieId: +form.categorieId,
-        statutEvenement: form.statutEvenement,
+        statutEvenement: form.statutEvenement, prixVIP: +form.prixVIP,
       };
 
       let eventId;
@@ -2433,6 +2433,7 @@ const EventsPage = ({ defaultShowForm = false, toast }) => {
       capacite:        ev.capacite || "",
       nbPlacesVIP:     ev.nbPlacesVIP || "",
       prix:            ev.prix || "",
+      prixVIP:            ev.prixVIP || "",
       categorieId:     ev.categorie?.id || ev.categorieId || "",
       statutEvenement: ev.statutEvenement || ev.status || "BROUILLON",
     });
@@ -2637,6 +2638,13 @@ const EventsPage = ({ defaultShowForm = false, toast }) => {
                     className="w-full px-4 py-2.5 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-violet-500 text-sm" />
                 </div>
                 <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Prix VIP (DH) <span className="text-red-500">*</span></label>
+                  <input type="number" value={form.prixVIP}
+                    onChange={e => setForm(p => ({ ...p, prixVIP: e.target.value }))}
+                    min="0" step="0.5" placeholder="150" required
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-violet-500 text-sm" />
+                </div>
+                <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">Catégorie <span className="text-red-500">*</span></label>
                   <select value={form.categorieId}
                     onChange={e => setForm(p => ({ ...p, categorieId: e.target.value }))} required
@@ -2720,7 +2728,7 @@ const EventsPage = ({ defaultShowForm = false, toast }) => {
         <table className="w-full text-sm min-w-[800px]">
           <thead className="bg-gray-50 border-b border-gray-100">
             <tr>
-              {["Titre", "Dates", "Ville / Lieu", "Prix", "Capacité", "Catégorie", "Statut", "Actions"].map(h => (
+              {["Titre", "Dates", "Ville / Lieu", "Prix", "Capacité", "Prix VIP", "Places VIP", "Catégorie", "Statut", "Actions"].map(h => (
                 <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">{h}</th>
               ))}
             </tr>
@@ -2756,6 +2764,8 @@ const EventsPage = ({ defaultShowForm = false, toast }) => {
                           <span className="text-xs text-gray-500">{ev.participants ?? 0}/{ev.capacite ?? 0}</span>
                         </div>
                       </td>
+                      <td className="px-4 py-3.5 font-semibold text-gray-900">{ev.prixVIP} DH</td>
+                      <td className="px-4 py-3.5 font-semibold text-gray-900">{ev.nbPlacesVIP}</td>
                       <td className="px-4 py-3.5 text-gray-500 text-xs">{ev.categorie?.nom || ev.categorie || "—"}</td>
                       <td className="px-4 py-3.5"><StatusBadge status={status} /></td>
                       <td className="px-4 py-3.5">

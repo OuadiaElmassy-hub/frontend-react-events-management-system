@@ -1,4 +1,4 @@
-import marocBackground from '../assets/backgrounds/maroc-touristique.jpg'
+import marocBackground from '../assets/backgrounds/maroc.jpg'
 
 const TAGS = ['🎵 Concerts', '🎤 Conférences', '⚽ Sport', '🎭 Culture', '🍽️ Gastronomie']
 
@@ -13,12 +13,12 @@ const HeroSection = () => {
         src={marocBackground}
         alt=""
         aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover object-center scale-102 transition-transform duration-700"
-        style={{ filter: 'brightness(0.35)' }}
+        className="absolute inset-0 w-full h-full object-cover object-center scale-100 transition-transform duration-700"
+        style={{ filter: 'brightness(0.55) contrast(1.1)' }}
       />
 
       {/* Overlays de dégradés fluides */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70" />
+      <div className="absolute inset-0  from-black/40 via-transparent to-black/70" />
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#FAF6F0] via-[#FAF6F0]/60 to-transparent" />
 
       {/* Content */}

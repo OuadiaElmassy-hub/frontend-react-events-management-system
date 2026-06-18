@@ -948,8 +948,8 @@ export default function ClientDashboard() {
   };
 
   const SidebarContent = () => (
-    <>
-      <div className="p-6 border-b border-gray-100">
+    <div className="flex flex-col h-full">
+      <div className="p-6 border-b border-gray-100 flex-shrink-0">
         <div className="flex items-center gap-3">
           {/* <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
             <FaCalendarAlt className="text-white text-sm" />
@@ -963,7 +963,7 @@ export default function ClientDashboard() {
           </div>
         </div>
       </div>
-      <nav className="flex-1 p-4 space-y-1">
+      <nav className="flex-1 overflow-y-auto p-4 space-y-1">
         {menu.map(item => (
           <button key={item.id}
             onClick={() => { setPage(item.id); setSidebarOpen(false); }}
@@ -993,7 +993,7 @@ export default function ClientDashboard() {
         </div>
       </nav>
       {/* Profil en bas */}
-      <div className="p-4 border-t border-gray-100">
+      <div className="p-4 border-t border-gray-100 flex-shrink-0">
         <div className="flex items-center gap-3 px-3 py-2">
           <img
             src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user?.nom || "C")}&size=36&background=3b82f6&color=fff`}
@@ -1014,13 +1014,13 @@ export default function ClientDashboard() {
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="h-screen bg-gray-50 flex overflow-hidden">
       {/* Sidebar Desktop */}
-      <aside className="hidden lg:flex w-64 bg-white border-r border-gray-100 flex-col shadow-sm flex-shrink-0">
+      <aside className="hidden lg:flex w-64 bg-white border-r border-gray-100 flex-col shadow-sm flex-shrink-0 h-screen">
         <SidebarContent />
       </aside>
 
@@ -1028,8 +1028,7 @@ export default function ClientDashboard() {
       {sidebarOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
           <div className="absolute inset-0 bg-black/40" onClick={() => setSidebarOpen(false)} />
-          <aside className="relative w-64 bg-white flex flex-col shadow-xl">
-            <button onClick={() => setSidebarOpen(false)}
+          <aside className="relative w-64 bg-white flex flex-col shadow-xl h-full">            <button onClick={() => setSidebarOpen(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
               <FaTimes size={20} />
             </button>
@@ -1039,8 +1038,8 @@ export default function ClientDashboard() {
       )}
 
       {/* Main */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <header className=" bg-white border-b border-gray-100 px-6 py-3.5 flex items-center justify-between shadow-sm">
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+        <header className=" bg-white border-b border-gray-100 px-6 py-3.5 flex items-center justify-between shadow-sm flex-shrink-0 z-10">
           {/* Gauche : hamburger + recherche */}
           <div className="flex items-center gap-4">
             <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-gray-500 hover:text-gray-700">
@@ -1081,7 +1080,7 @@ export default function ClientDashboard() {
           </div>
 
         </header>
-        <main className="flex-1 p-6 overflow-auto">
+        <main className="flex-1 overflow-y-auto p-6">
           {pages[page]}
         </main>
       </div>

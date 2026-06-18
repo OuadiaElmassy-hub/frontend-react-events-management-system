@@ -146,8 +146,8 @@ export default function ContactUs() {
                            </svg>
                         </div>
                         <div className="text-sm ml-4">
-                           <small className="block text-blue-200/60 font-medium">Support Rovista</small>
-                           <span className="font-semibold text-orange-400 hover:underline cursor-pointer">support@rovista.ma</span>
+                           <small className="block text-blue-200/60 font-medium">Support AtlasEvents</small>
+                           <span className="font-semibold text-orange-400 hover:underline cursor-pointer">support@atlasEvents.ma</span>
                         </div>
                      </li>
                   </ul>

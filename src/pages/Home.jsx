@@ -37,7 +37,7 @@ const Home = () => {
         setLoadingEvents(true)
         const response = await getPublishedEvents({
           page: 0,
-          size: 4, // 4 événements offrent un meilleur équilibre visuel en grille
+          size: 3, // 3 événements offrent un meilleur équilibre visuel en grille
           categorieId: null,
           keyword: "",
           ville: "",
