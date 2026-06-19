@@ -370,7 +370,7 @@ const LoginPage = ({ onNavigate, onSuccess }) => {
                 type="text"
                 value={form.username}
                 onChange={handleChange}
-                placeholder="mon username"
+                placeholder="Votre nom d'utilisateur"
                 icon={<FaEnvelope />}
                 required
               />
