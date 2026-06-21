@@ -114,6 +114,13 @@ const ChatBot = () => {
       // 0 résultat réel.
       const hasResults = data.hasResults === true
 
+      // AJOUT : le backend peut désormais répondre en mode "conversation"
+      // (salutation, remerciement, question hors sujet) plutôt que
+      // "recherche". Dans ce cas il ne faut ni proposer de lien vers les
+      // résultats, ni naviguer automatiquement — juste afficher la réponse
+      // libre générée par le LLM.
+      const isConversation = data.intent === 'conversation'
+
       const criteresTexte = []
       if (criteria.ville)      criteresTexte.push(`📍 ${criteria.ville}`)
       if (criteria.categorie)  criteresTexte.push(`🎭 ${criteria.categorie}`)
@@ -122,13 +129,15 @@ const ChatBot = () => {
 
       const hasCriteria = criteresTexte.length > 0
 
-      // CORRECTIF : le texte affiché vient maintenant de data.message
-      // (construit par le backend, qui connaît le vrai total et peut
-      // proposer une suggestion ciblée : "essayez d'augmenter le budget",
-      // etc.) dès qu'il n'y a pas de résultat — même si des critères
-      // ont bien été reconnus.
+      // CORRECTIF : en mode conversation, le texte vient toujours de
+      // data.message (réponse libre générée par le LLM côté backend) —
+      // on ne construit jamais le message "J'ai trouvé vos critères..."
+      // dans ce cas, même si par hasard des champs ville/categorie/prixMax
+      // étaient présents dans la réponse.
       let botText
-      if (hasResults && hasCriteria) {
+      if (isConversation) {
+        botText = data.message
+      } else if (hasResults && hasCriteria) {
         botText = `J'ai trouvé vos critères : ${criteresTexte.join(' · ')}\n\nJe vous redirige vers les résultats… ✨`
       } else if (data.message) {
         botText = data.message
@@ -141,17 +150,17 @@ const ChatBot = () => {
         text:      botText,
         sender:    'bot',
         time:      new Date(),
-        // CORRECTIF : le lien "Voir les résultats" n'apparaît que si
-        // hasResults est vrai, plus seulement si des critères existent.
-        targetUrl: hasResults ? buildEventsUrl(criteria) : null,
+        // CORRECTIF : pas de lien "Voir les résultats" en mode conversation,
+        // même si hasResults était vrai par accident côté backend.
+        targetUrl: (!isConversation && hasResults) ? buildEventsUrl(criteria) : null,
       }
 
       setMessages(prev => [...prev, botMsg])
       if (!isOpen || isMinimized) setUnread(n => n + 1)
 
       // CORRECTIF : on ne navigue automatiquement que s'il y a vraiment
-      // des résultats à afficher.
-      if (hasResults) {
+      // des résultats à afficher ET que ce n'est pas une simple conversation.
+      if (!isConversation && hasResults) {
         setTimeout(() => {
           navigate(buildEventsUrl(criteria))
         }, 1200)
@@ -389,7 +398,6 @@ const ChatBot = () => {
 }
 
 export default ChatBot
-
 
 // import { useState, useRef, useEffect } from 'react'
 // import { BsStars } from 'react-icons/bs'
