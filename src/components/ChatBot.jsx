@@ -6,14 +6,14 @@ import { BASE_URL } from '../utils/fetchFn'
 
 // ─── Map catégorie nom → ID (adapter selon ta BDD) ────────────────
 const CATEGORIE_ID_MAP = {
-  'Concert':     1,
-  'Festival':    2,
-  'Theatre':     3,
-  'Sport':       4,
-  'Conference':  5,
-  'Art':         6,
-  'Comedie':     7,
-  'Cinema':      8,
+  'concert':     1, 'concerts':     1,
+  'festival':    2, 'festivals':    2,
+  'theatre':     3, 'theatres':     3,
+  'sport':       4, 'sports':       4,
+  'conference':  5, 'conferences':  5,
+  'art':         6, 'arts':         6,
+  'comedie':     7, 'comedies':     7,
+  'cinema':      8,
 }
 
 const INITIAL_MESSAGES = [
@@ -68,9 +68,20 @@ const ChatBot = () => {
     if (criteria.keyword)  params.set('keyword',    criteria.keyword)
     if (criteria.prixMax)  params.set('prixMax',    String(criteria.prixMax))
 
-    if (criteria.categorie) {
-      const id = CATEGORIE_ID_MAP[criteria.categorie]
-      if (id) params.set('categorieId', String(id))
+    if (criteria && criteria.categorie) {
+      
+      const cleanString = (str) => 
+        str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+
+      const targetCategory = cleanString(criteria.categorie);
+
+      
+      const foundEntry = Object.entries(CATEGORIE_ID_MAP).find(
+        ([key]) => cleanString(key) === targetCategory
+      );
+      
+      const id = foundEntry ? foundEntry[1] : null;
+      if (id) params.set('categorieId', String(id));
     }
 
     params.set('page', '0')
