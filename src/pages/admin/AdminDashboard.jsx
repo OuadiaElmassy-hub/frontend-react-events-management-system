@@ -2413,9 +2413,7 @@ export default function AdminDashboard() {
     { id: "events-validation", label: "Validation événements", icon: <FaCheckCircle />, badge: pendingCount },
     { id: "notifications",     label: "Notifications",         icon: <FaBell />, badge: unreadCount },
     { id: "categories",        label: "Catégories",            icon: <FaTags /> },
-    { id: "villes",            label: "Villes",                icon: <FaMapMarkerAlt /> },
     { id: "statistics",        label: "Statistiques",          icon: <FaChartBar /> },
-    { id: "settings",          label: "Paramètres",            icon: <FaCogs /> },
   ];
 
   const renderPage = () => {
